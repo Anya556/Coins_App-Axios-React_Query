@@ -13,7 +13,7 @@ const CoinsTable = ({ data }) => {
       </thead>
       <tbody>
         {data.map((obj) => (
-          <tr>
+          <tr key={obj.rank}>
             <td>{obj.rank}</td>
             <td>
               <img
@@ -31,5 +31,4 @@ const CoinsTable = ({ data }) => {
     </Table>
   );
 };
-
 export default CoinsTable;
