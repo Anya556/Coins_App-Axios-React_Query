@@ -1,48 +1,37 @@
 import axios from 'axios';
-import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CoinsTable from './components/CoinsTable';
 import Container from 'react-bootstrap/Container';
+import { useQuery } from '@tanstack/react-query';
 
-function App() {
-  const [coins, setCoins] = useState();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+async function fetchCoins() {
+  const { data } = await axios.get(
+    `https://api.coinstats.app/public/v1/coins?limit=10`
+  );
+  return data.coins;
+}
 
-  async function fetchCoins() {
-    try {
-      const { data } = await axios.get(
-        `https://api.coinstats.app/public/v1/coins?limit=10`
-      );
-      setCoins(data.coins);
-    } catch (err) {
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
-  }
+export default function App() {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['coins'],
+    queryFn: fetchCoins,
+  });
 
-  useEffect(() => {
-    fetchCoins();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return <h3>Loading...</h3>;
   }
 
-  if (error) {
+  if (isError) {
     return <h3>Error</h3>;
   }
 
-  if (!coins) {
+  if (!data) {
     return <h3> No data</h3>;
   }
 
   return (
     <Container style={{ marginTop: 30, maxWidth: 600 }}>
-      <CoinsTable data={coins} />
+      <CoinsTable data={data} />
     </Container>
   );
 }
-
-export default App;
