@@ -12,7 +12,7 @@ const CoinsTable = ({ data }) => {
         </tr>
       </thead>
       <tbody>
-        {data.map((obj) => (
+        {data.result.map((obj) => (
           <tr key={obj.rank}>
             <td>{obj.rank}</td>
             <td>

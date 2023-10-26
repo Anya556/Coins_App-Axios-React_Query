@@ -4,8 +4,6 @@ import CoinsTable from './components/CoinsTable';
 import Container from 'react-bootstrap/Container';
 import { useQuery } from '@tanstack/react-query';
 import API_KEY from './config';
-// import { useState } from 'react';
-// import Button from 'react-bootstrap/Button';
 
 async function fetchCoins() {
   const options = {
@@ -15,19 +13,18 @@ async function fetchCoins() {
       'X-API-KEY': API_KEY,
     },
   };
-  const { data } = await axios.get(
+
+  const response = await axios.get(
     'https://openapiv1.coinstats.app/coins',
     options
   );
-  return data.coins;
+  return response.data;
 }
 
 export default function App() {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['coins', fetchCoins],
+    queryKey: ['coins'],
     queryFn: fetchCoins,
-    // queryFn: () => fetchCoins(page),
-    // keepPreviousData: true,
   });
 
   if (isLoading) {
@@ -45,21 +42,6 @@ export default function App() {
   return (
     <Container style={{ marginTop: 30, maxWidth: 600 }}>
       <CoinsTable data={data} />
-
-      {/* <Button
-        style={{ marginRight: 20 }}
-        variant="outline-primary"
-        onClick={() => setPage((page) => page - 10)}
-        disabled={!page}
-      >
-        Back
-      </Button>
-      <Button
-        variant="outline-primary"
-        onClick={() => setPage((page) => page + 10)}
-      >
-        Next
-      </Button> */}
     </Container>
   );
 }
