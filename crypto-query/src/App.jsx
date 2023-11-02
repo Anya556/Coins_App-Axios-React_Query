@@ -17,7 +17,7 @@ async function fetchCoins(page) {
   };
 
   const response = await axios.get(
-    `https://openapiv1.coinstats.app/coins?page=${page}`,
+    `https://openapiv1.coinstats.app/coins?page=${page}&limit=10`,
     options
   );
   return response.data;
@@ -29,6 +29,7 @@ export default function App() {
     queryKey: ['coins', page],
     queryFn: () => fetchCoins(page),
     keepPreviousData: true,
+    refetchOnWindowFocus: false,
   });
   console.log(data);
 
